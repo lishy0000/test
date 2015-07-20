@@ -1,40 +1,10 @@
 package com.succez;
 
-class TNode {
-	String value;
-	TNode left, right;
-
-	public TNode(String s) {
-		this.value = s;
-	}
-}
-
-
 public class lesson3 {
-
-	static TNode prepareTest1() {
-		TNode root = new TNode("A");
-		TNode left = new TNode("B");
-		TNode right = new TNode("C");
-		TNode leftleft = new TNode("D");
-		TNode leftright = new TNode("E");
-		TNode rightleft = new TNode("F");
-
-		root.left = left;
-		root.right = right;
-		left.left = leftleft;
-		left.right = leftright;
-		right.left = rightleft;
-
-		return root;
-	}
-
-	// prepareTest2
-
-	// -1,0,1,2,3
+//返回节点的字符串
 	static String TreeLevel(TNode tree, int n) {
 		if (tree == null) {
-			
+
 			return "空树";
 		} else if (n <= 0) {
 			return "n不能为0和负数";
@@ -46,7 +16,7 @@ public class lesson3 {
 			return sb.toString();
 		}
 	}
-
+//从左到右依次找到该层所有节点加在字符串末尾
 	static void TreeL(TNode tree, int n, StringBuilder sb) {
 		if (tree != null) {
 
@@ -61,8 +31,8 @@ public class lesson3 {
 
 	public static void main(String[] args) {
 
-		TNode tree1 = prepareTest1();
-		String value1 = TreeLevel(tree1, 0);
+		TNode tree1 = Testtree1.prepareTest1();
+		String value1 = TreeLevel(tree1, 2);
 		System.out.println(value1);
 
 	}
