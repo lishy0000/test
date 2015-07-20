@@ -38,13 +38,13 @@ public class test1 {
 	@Test
 	public void test() {
 		try {
-			File file1 = new File("F:\\a.txt");
-			File file2 = new File("F:\\b.txt");
+			File file1 = new File("test1file1.txt");
+			File file2 = new File("test1file2.txt");
 			byte[] bytes1 = lesson1.file2buf(file1);
 			byte[] bytes2 = lesson1.file2buf(file2);
 			byte[] bytes0 = { 'a', 'b' };
 			lesson1.bytefile(bytes0);
-			File file3 = new File("F:\\output.txt");
+			File file3 = new File("test1file3.txt");
 			byte[] bytes3 = lesson1.file2buf(file3);
 			String k1 = new String(bytes1);
 			String k2 = new String(bytes2);

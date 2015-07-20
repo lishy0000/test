@@ -48,7 +48,7 @@ public class lesson1 {
 			BufferedInputStream input = new BufferedInputStream(
 					new FileInputStream(fobj));
 			input.read(b);
-			// length表示此文件实际有多少字节。
+//			length表示此文件实际有多少字节。
 //		System.out.println("数组长度为" + (int) fobj.length());
 //			for (int i = 0; i < (int) fobj.length(); i++) { // 把文件的实际字节都打印出来。
 //				System.out.println(b[i]);
@@ -65,12 +65,12 @@ public class lesson1 {
 
 	// 还有是把数组里的字节以文件的形式读出来，并保存在电脑上。
 	public static void bytefile(byte[] b) throws IOException {
-		File fileOut = new File("F:\\output.txt");
-		if (fileOut.exists()) { // 如果F盘有相同的文件名字就把它删除。没有的话就新建。
-			fileOut.delete();
+		File file3 = new File("test1file3.txt"); 
+		if (file3.exists()) { // 如果F盘有相同的文件名字就把它删除。没有的话就新建。
+			file3.delete();
 		}
 		FileOutputStream output = null;
-		output = new FileOutputStream(fileOut);
+		output = new FileOutputStream(file3);
 		output.write(b, 0, b.length); // 把字节数组里的实际有效字节写入流里。
 		output.close();
 	}
@@ -79,8 +79,9 @@ public class lesson1 {
 
 		try {
 			// 任意的文件读到字节数组里面。
-			File file = new File("F:\\b.txt");
+			File file = new File("test1file3.txt");
 			byte[] bytes = file2buf(file);
+			bytefile(bytes);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
