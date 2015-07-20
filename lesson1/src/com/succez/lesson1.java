@@ -6,7 +6,7 @@ import java.io.*;
 public class lesson1 {
 
 	public static byte[] file2buf(File fobj) throws IOException {
-		//注释掉另一种不太合适的方法，提供另一种实路
+		// 注释掉另一种不太合适的方法，提供另一种实路
 		// byte[] result = new byte[(int) fobj.length()];
 		// BufferedInputStream input = new BufferedInputStream(new
 		// FileInputStream(fobj));
@@ -49,10 +49,10 @@ public class lesson1 {
 					new FileInputStream(fobj));
 			input.read(b);
 			// length表示此文件实际有多少字节。
-			System.out.println("数组长度为" + (int) fobj.length());
-			for (int i = 0; i < (int) fobj.length(); i++) { // 把文件的实际字节都打印出来。
-				System.out.println(b[i]);
-			}
+//		System.out.println("数组长度为" + (int) fobj.length());
+//			for (int i = 0; i < (int) fobj.length(); i++) { // 把文件的实际字节都打印出来。
+//				System.out.println(b[i]);
+//			}
 			input.close();
 		} catch (FileNotFoundException j) {
 			b = null;
@@ -64,22 +64,16 @@ public class lesson1 {
 	}
 
 	// 还有是把数组里的字节以文件的形式读出来，并保存在电脑上。
-	// File fileOut = new File("F:\\b.txt");
-	// if (fileOut.exists()) { // 如果F盘有相同的文件名字就把它删除。没有的话就新建。
-	// fileOut.delete();
-	// }
-	// FileOutputStream output = null;
-	// output = new FileOutputStream(fileOut);
-	// output.write(b, 0, length); // 把字节数组里的实际有效字节写入流里。
-	// output.close();
-	// } catch (IOException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	//
-	// } catch (FileNotFoundException e1) {
-	// // TODO Auto-generated catch block
-	// e1.printStackTrace();
+	public static void bytefile(byte[] b) throws IOException {
+		File fileOut = new File("F:\\output.txt");
+		if (fileOut.exists()) { // 如果F盘有相同的文件名字就把它删除。没有的话就新建。
+			fileOut.delete();
+		}
+		FileOutputStream output = null;
+		output = new FileOutputStream(fileOut);
+		output.write(b, 0, b.length); // 把字节数组里的实际有效字节写入流里。
+		output.close();
+	}
 
 	public static void main(String[] args) {
 
