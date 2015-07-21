@@ -1,40 +1,61 @@
 package com.succez;
-//æµ‹è¯•ç±»
+
+//Ê÷
 class Testtree1 {
-//å¸¸è§„æ•°æµ‹è¯•ç”¨ä¾‹
+
+	static boolean exp = true;
+	static int count = 0;
+
+	// ÆÕÍ¨Ê÷
 	static TNode prepareTest1() {
-		TNode root = new TNode("A");
-		TNode left = new TNode("B");
-		TNode right = new TNode("C");
+		TNode root = new TNode('A');
+		TNode left = new TNode('B');
+		TNode right = new TNode('C');
 
 		root.left = left;
 		root.right = right;
 
 		return root;
 	}
-//	//ç¼ºçœæ•°æµ‹è¯•ç”¨ä¾‹
+
+	// È±Ê¡Ê÷
 	static TNode prepareTest2() {
-		TNode root = new TNode("A");
-		TNode left = new TNode("B");
-		TNode right = new TNode("C");
-		TNode leftleft = new TNode("D");
-		TNode leftright = new TNode("E");
-		TNode rightleft = new TNode("F");
-		
-		
+		TNode root = new TNode('A');
+		TNode left = new TNode('B');
+		TNode right = new TNode('C');
+		TNode leftleft = new TNode('D');
+		TNode leftright = new TNode('E');
+		TNode rightleft = new TNode('F');
+
 		root.left = left;
 		root.right = right;
-		left.left=leftleft;
-		left.right=leftright;
-		right.left=rightleft;
-		
+		left.left = leftleft;
+		left.right = leftright;
+		right.left = rightleft;
+
 		return root;
 	}
-//ç©ºæ ‘æµ‹è¯•ç”¨ä¾‹
+
+	// ¿ÕÊ÷
 	static TNode prepareTest3() {
 		TNode root = null;
 		return root;
 	}
 
-}
+	// Êı×é½¨Á¢µÄÊ÷static TNode prepareTest4(char[]chars) {
 
+	public static TNode prepareTest4(TNode root, char[] a, int i,int n) {
+		if (i < a.length) {
+			if(Math.pow(2, n)-1<a.length)
+			{
+				TNode tl = new TNode();
+				TNode tr = new TNode();
+				root.setNode(a[i], prepareTest4(tl, a, ++count,++n),
+						prepareTest4(tr, a, ++count,n));
+			}
+			
+		}
+	
+		return root;
+	}
+}

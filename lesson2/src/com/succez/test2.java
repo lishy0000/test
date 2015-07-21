@@ -1,14 +1,9 @@
 package com.succez;
 
-import junit.framework.Assert;
+import org.junit.*;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
-@SuppressWarnings("deprecation")
+
 public class test2 {
 
 	@BeforeClass

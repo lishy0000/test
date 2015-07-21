@@ -1,20 +1,9 @@
 package com.succez;
 
-import junit.framework.Assert;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
-/**
- * 
- * @author John
- *
- */
 
-@SuppressWarnings("deprecation")
 public class test3 {
 
 	@BeforeClass
@@ -35,9 +24,11 @@ public class test3 {
 
 	@Test
 	public void test() {
-		TNode tree1 = Testtree1.prepareTest1();// 常规树
-		TNode tree2 = Testtree1.prepareTest2();// 缺省数
-		TNode tree3 = Testtree1.prepareTest3();// 空树
+		char[] chars={'A','B','C','D','E'};
+		TNode tree1 = Testtree1.prepareTest1();//普通树测试
+		TNode tree2 = Testtree1.prepareTest2();// 缺省树
+		TNode tree3 = Testtree1.prepareTest3();//空树
+	
 		Assert.assertEquals("n不能为0和负数", lesson3.TreeLevel(tree1, 0));
 		Assert.assertEquals("n不能为0和负数", lesson3.TreeLevel(tree1, -1));
 		Assert.assertEquals("", lesson3.TreeLevel(tree1, 3));

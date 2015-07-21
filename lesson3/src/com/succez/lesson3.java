@@ -1,13 +1,14 @@
 package com.succez;
 
 public class lesson3 {
-//è¿”å›žèŠ‚ç‚¹çš„å­—ç¬¦ä¸²
+//·µ»Ø½ÚµãµÄ×Ö·û´®
+	static char[] chars={'A','B','C','D','E'};
 	static String TreeLevel(TNode tree, int n) {
 		if (tree == null) {
 
-			return "ç©ºæ ‘";
+			return "¿ÕÊ÷";
 		} else if (n <= 0) {
-			return "nä¸èƒ½ä¸º0å’Œè´Ÿæ•°";
+			return "n²»ÄÜÎª0ºÍ¸ºÊý";
 		} else {
 			StringBuilder sb = new StringBuilder();
 
@@ -16,7 +17,7 @@ public class lesson3 {
 			return sb.toString();
 		}
 	}
-//ä»Žå·¦åˆ°å³ä¾æ¬¡æ‰¾åˆ°è¯¥å±‚æ‰€æœ‰èŠ‚ç‚¹åŠ åœ¨å­—ç¬¦ä¸²æœ«å°¾
+//ÕÒ³ö¸Ã²ãËùÓÐ½Úµã²¢¼ÓÔØÔÚ×Ö·û´®ÖÐ
 	static void TreeL(TNode tree, int n, StringBuilder sb) {
 		if (tree != null) {
 
@@ -30,9 +31,11 @@ public class lesson3 {
 	}
 
 	public static void main(String[] args) {
-
-		TNode tree1 = Testtree1.prepareTest1();
-		String value1 = TreeLevel(tree1, 2);
+		 TNode root = new TNode();  
+         
+	
+		TNode tree1 = Testtree1.prepareTest4(root,chars,0,0);
+		String value1 = TreeLevel(tree1, 3);
 		System.out.println(value1);
 
 	}

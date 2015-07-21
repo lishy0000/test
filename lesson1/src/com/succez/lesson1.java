@@ -2,11 +2,11 @@ package com.succez;
 
 import java.io.*;
 
-//å°†æ–‡ä»¶å†…å®¹è½¬æ¢æˆbyteæ•°ç»„è¿”å›,å¦‚æœæ–‡ä»¶ä¸å­˜åœ¨æˆ–è€…è¯»å…¥é”™è¯¯è¿”å›null
+//½«ÎÄ¼şÄÚÈİ×ª»»³ÉbyteÊı×é·µ»Ø,Èç¹ûÎÄ¼ş²»´æÔÚ»òÕß¶ÁÈë´íÎó·µ»Ønull 
 public class lesson1 {
 
 	public static byte[] file2buf(File fobj) throws IOException {
-		// æ³¨é‡Šæ‰å¦ä¸€ç§ä¸å¤ªåˆé€‚çš„æ–¹æ³•ï¼Œæä¾›å¦ä¸€ç§å®è·¯
+		// ½«ÎÄ¼şÄÚÈİ×ª»»³ÉbyteÊı×é·µ»Ø,Èç¹ûÎÄ¼ş²»´æÔÚ»òÕß¶ÁÈë´íÎó·µ»Ønull
 		// byte[] result = new byte[(int) fobj.length()];
 		// BufferedInputStream input = new BufferedInputStream(new
 		// FileInputStream(fobj));
@@ -14,12 +14,12 @@ public class lesson1 {
 		// int p = -1;
 		// while((p = input.read(result))!=-1){
 		//
-		// throw new Exception("é”™è¯¯ï¼");
+		// throw new Exception("´íÎó");
 		// }
 		// }
 		// catch (Exception In)
 		// {
-		// System.out.println("å‘ç”Ÿé”™è¯¯");
+		// System.out.println("·¢Éú´íÎó");
 		// }
 		// finally{
 		//
@@ -48,12 +48,14 @@ public class lesson1 {
 			BufferedInputStream input = new BufferedInputStream(
 					new FileInputStream(fobj));
 			input.read(b);
-//			lengthè¡¨ç¤ºæ­¤æ–‡ä»¶å®é™…æœ‰å¤šå°‘å­—èŠ‚ã€‚
-//		System.out.println("æ•°ç»„é•¿åº¦ä¸º" + (int) fobj.length());
-//			for (int i = 0; i < (int) fobj.length(); i++) { // æŠŠæ–‡ä»¶çš„å®é™…å­—èŠ‚éƒ½æ‰“å°å‡ºæ¥ã€‚
-//				System.out.println(b[i]);
-//			}
-			input.close();
+			// length±íÊ¾´ËÎÄ¼şÊµ¼ÊÓĞ¶àÉÙ×Ö½Ú
+			// System.out.println("uuuuu" + (int) fobj.length());
+			// for (int i = 0; i < (int) fobj.length(); i++) { //
+			// °ÑÎÄ¼şµÄÊµ¼Ê×Ö½ÚÁ¿¶¼´òÓ¡³öÀ´¡£
+			// System.out.println(b[i]);
+			// }
+			if (input != null)
+				input.close();
 		} catch (FileNotFoundException j) {
 			b = null;
 			j.printStackTrace();
@@ -63,22 +65,23 @@ public class lesson1 {
 		return b;
 	}
 
-	// è¿˜æœ‰æ˜¯æŠŠæ•°ç»„é‡Œçš„å­—èŠ‚ä»¥æ–‡ä»¶çš„å½¢å¼è¯»å‡ºæ¥ï¼Œå¹¶ä¿å­˜åœ¨ç”µè„‘ä¸Šã€‚
+	// »¹ÓĞÊÇ°ÑÊı×éÀïµÄ×Ö½ÚÒÔÎÄ¼şµÄĞÎÊ½¶Á³öÀ´£¬²¢±£´æÔÚµçÄÔÉÏ¡£
 	public static void bytefile(byte[] b) throws IOException {
-		File file3 = new File("test1file3.txt"); 
-		if (file3.exists()) { // å¦‚æœFç›˜æœ‰ç›¸åŒçš„æ–‡ä»¶åå­—å°±æŠŠå®ƒåˆ é™¤ã€‚æ²¡æœ‰çš„è¯å°±æ–°å»ºã€‚
+		File file3 = new File("test1file3.txt");
+		if (file3.exists()) { // Èç¹ûFÅÌÓĞÏàÍ¬µÄÎÄ¼şÃû×Ö¾Í°ÑËüÉ¾³ı¡£Ã»ÓĞµÄ»°¾ÍĞÂ½¨¡£
 			file3.delete();
 		}
 		FileOutputStream output = null;
 		output = new FileOutputStream(file3);
-		output.write(b, 0, b.length); // æŠŠå­—èŠ‚æ•°ç»„é‡Œçš„å®é™…æœ‰æ•ˆå­—èŠ‚å†™å…¥æµé‡Œã€‚
-		output.close();
+		output.write(b, 0, b.length); // °Ñ×Ö½ÚÊı×éÀïµÄÊµ¼ÊÓĞĞ§×Ö½ÚĞ´ÈëÁ÷Àï¡£
+		if (output != null)
+			output.close();
 	}
 
 	public static void main(String[] args) {
 
 		try {
-			// ä»»æ„çš„æ–‡ä»¶è¯»åˆ°å­—èŠ‚æ•°ç»„é‡Œé¢ã€‚
+			// ÈÎÒâµÄÎÄ¼ş¶Áµ½×Ö½ÚÊı×éÀïÃæ¡£
 			File file = new File("test1file3.txt");
 			byte[] bytes = file2buf(file);
 			bytefile(bytes);
