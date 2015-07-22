@@ -1,64 +1,73 @@
 package com.succez;
+import java.io.*;   
+import java.net.*;  
+//    ä»ç½‘ç»œè·å–å›¾ç‰‡åˆ°æœ¬åœ° 
+    public class lesson4 {  
+    	static String ur1 = "http://www.baidu.c//badugo1.gif";  
+        public static void lesson(String url,String fileName){  
+        	try{
+            byte[] btImg = getImageFromNetByUrl(url);  
+            if(null != btImg && btImg.length > 0){  
+                System.out.println("è¯»å–åˆ°ï¼š" + btImg.length + " å­—èŠ‚");  
+              
+                writeImageToDisk(btImg, fileName,url);  
+            }else{  
+                System.out.println("æ²¡æœ‰ä»è¯¥è¿æ¥è·å¾—å†…å®¹");  
+            } 
+            } catch (Exception e)
+ 		   {
+            	e.printStackTrace();
+ 		  System.out.println("æœªçŸ¥é”™è¯¯ï¼");
+    		   }
+             
+        }  
+//        å°†å›¾ç‰‡å†™å…¥åˆ°ç£ç›˜ 
+        public static void writeImageToDisk(byte[] img, String fileName,String url)throws Exception{  
+             
+                File file = new File("F:\\" + fileName);
+                if (file.exists()) { // å¦‚æœFç›˜æœ‰ç›¸åŒçš„æ–‡ä»¶åå­—å°±æŠŠå®ƒåˆ é™¤ã€‚æ²¡æœ‰çš„è¯å°±æ–°å»ºã€‚
+        			file.delete();
+        		}
+                BufferedOutputStream fops=null;
+                fops = new BufferedOutputStream(new FileOutputStream(file));  
+                fops.write(img);  
+                fops.flush();  
+                if(fops!=null)fops.close();  
+                System.out.println("å›¾ç‰‡å·²ç»å†™å…¥åˆ°Fç›˜");  
+            } 
+      
+//        æ ¹æ®åœ°å€è·å¾—æ•°æ®çš„å­—èŠ‚æµ 
+        public static byte[] getImageFromNetByUrl(String strUrl){  
+            try {  
+                URL url = new URL(strUrl);  
+                HttpURLConnection conn = (HttpURLConnection)url.openConnection();  
+                conn.setRequestMethod("GET");  
+                conn.setConnectTimeout(5 * 1000); 
+                InputStream inStream=null;
+                 inStream = conn.getInputStream();//é€šè¿‡è¾“å…¥æµè·å–å›¾ç‰‡æ•°æ®  
+                byte[] btImg = readInputStream(inStream);//å¾—åˆ°å›¾ç‰‡çš„äºŒè¿›åˆ¶æ•°æ®  
+                if(inStream!=null)inStream.close(); 
+                return btImg;  
+            } catch (Exception e) {  
+                e.printStackTrace();
+                return null;
+            }  
+           
+        }  
+//        ä»è¾“å…¥æµä¸­è·å–æ•°æ® 
+        public static byte[] readInputStream(InputStream inStream) throws Exception{  
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();  
+            byte[] buffer = new byte[1024];  
+            int len = 0;  
+            while( (len=inStream.read(buffer)) != -1 ){  
+                outStream.write(buffer, 0, len);  
+            }   
+            return outStream.toByteArray();  
+        }  
+        public static void main(String[] args) {
+        	String fileName = "ç™¾åº¦.gif"; 
+        	lesson( ur1,fileName);
+    		
+    	}
+    }  
 
-import java.io.*;
-import java.net.*;
-
-//´ÓÍøÂç»ñÈ¡Í¼Æ¬µ½±¾µØ 
-public class lesson4 {
-
-	public static void main(String[] args) {
-		try {
-			String url = "http://www.baidu.com/img/baidu_sylogo1.gif";
-			byte[] btImg = getImageFromNetByUrl(url);
-			if (null != btImg && btImg.length > 0) {
-				System.out.println("¶ÁÈ¡µ½£º" + btImg.length + " ×Ö½Ú");
-				String fileName = "°Ù¶È.gif";
-				writeImageToDisk(btImg, fileName);
-			} else {
-				System.out.println("Ã»ÓĞ´Ó¸ÃÁ¬½Ó»ñµÃÄÚÈİ");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Î´Öª´íÎó£¡");
-		}
-
-	}
-
-	// ½«Í¼Æ¬Ğ´Èëµ½´ÅÅÌ
-	public static void writeImageToDisk(byte[] img, String fileName)
-			throws Exception {
-
-		File file = new File("F:\\" + fileName);
-		BufferedOutputStream fops = new BufferedOutputStream(
-				new FileOutputStream(file));
-		fops.write(img);
-		fops.flush();
-		fops.close();
-		System.out.println("Í¼Æ¬ÒÑ¾­Ğ´Èëµ½FÅÌ");
-	}
-
-	// ¸ù¾İµØÖ·»ñµÃÊı¾İµÄ×Ö½ÚÁ÷
-	public static byte[] getImageFromNetByUrl(String strUrl) {
-		try {
-			URL url = new URL(strUrl);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setConnectTimeout(5 * 1000);
-			InputStream inStream = conn.getInputStream();// Í¨¹ıÊäÈëÁ÷»ñÈ¡Í¼Æ¬Êı¾İ
-
-			ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-			byte[] buffer = new byte[1024];
-			int len = 0;
-			while ((len = inStream.read(buffer)) != -1) {
-				outStream.write(buffer, 0, len);
-			}
-			inStream.close();
-			conn.disconnect();
-			return outStream.toByteArray();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-}
-// ´ÓÊäÈëÁ÷ÖĞ»ñÈ¡Êı¾İ

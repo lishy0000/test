@@ -52,7 +52,7 @@ public class lesson1 {
 	// 还有是把数组里的字节以文件的形式读出来，并保存在电脑上。
 	public static void bytefile(byte[] b) throws IOException {
 		File file3 = new File("test1file3.txt");
-		if (file3.exists()) { // 如果F盘有相同的文件名字就把它删除。没有的话就新建。
+		if (file3.exists()) { // 如果当前目录有相同的文件名字就把它删除。没有的话就新建。
 			file3.delete();
 		}
 		FileOutputStream output = null;
