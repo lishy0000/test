@@ -24,12 +24,12 @@ public class test2 {
 
 	@Test
 	public void test() {
-		Assert.assertEquals("0", new intToHex(0).reresult);
-		Assert.assertEquals("-1", new intToHex(-1).reresult);
-		Assert.assertEquals("F", new intToHex(15).reresult);
-		Assert.assertEquals("10", new intToHex(16).reresult);
-		Assert.assertEquals("7FFFFFFF", new intToHex(Integer.MAX_VALUE).reresult);
-		Assert.assertEquals("80000000", new intToHex(Integer.MIN_VALUE).reresult);
+		Assert.assertEquals("0", new IntToHex().intToHex(0));
+		Assert.assertEquals("-1", new IntToHex().intToHex(-1));
+		Assert.assertEquals("F", new IntToHex().intToHex(15));
+		Assert.assertEquals("10", new IntToHex().intToHex(16));
+		Assert.assertEquals("7FFFFFFF", new IntToHex().intToHex(Integer.MAX_VALUE));
+		Assert.assertEquals("80000000", new IntToHex().intToHex(Integer.MIN_VALUE));
 		
 	}
 }

@@ -24,11 +24,11 @@ public class test3 {
 
 	@Test
 	public void test() {
-		char[] chars={'A','B','C','D','E'};
+		String[] chars={"A","B","c","D","E"};
 		TNode tree1 = Testtree1.prepareTest1();//普通树测试
 		TNode tree2 = Testtree1.prepareTest2();// 缺省树
 		TNode tree3 = Testtree1.prepareTest3();//空树
-	
+		TNode tree4 = Testtree1.prepareTest4(chars);//数组构造的树
 		Assert.assertEquals("n不能为0和负数", lesson3.TreeLevel(tree1, 0));
 		Assert.assertEquals("n不能为0和负数", lesson3.TreeLevel(tree1, -1));
 		Assert.assertEquals("", lesson3.TreeLevel(tree1, 3));
@@ -38,6 +38,7 @@ public class test3 {
 		Assert.assertEquals("DEF", lesson3.TreeLevel(tree2, 3));
 		Assert.assertEquals("BC", lesson3.TreeLevel(tree2, 2));
 		Assert.assertEquals("空树", lesson3.TreeLevel(tree3, 1));
+		Assert.assertEquals("DE", lesson3.TreeLevel(tree4, 3));
 
 	}
 }

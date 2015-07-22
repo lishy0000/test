@@ -1,24 +1,21 @@
 package com.succez;
 
-//16½øÖÆ×ª»»Îª×Ö·û´®
-public class intToHex {
-
+public class IntToHex {
+//æ•°ç»„åŒ–ä¸º16è¿›åˆ¶å¾—åˆ°å­—ç¬¦ä¸²
 	static final char o[] = new char[] { '0', '1', '2', '3', '4', '5', '6',
 			'7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
-	String reresult;
 
-	// 16½øÖÆ×ª»»Îª×Ö·û´®
-	intToHex(int n) {
+	String intToHex(int n) {
 		boolean exp = true;
 		int s[] = new int[9];
 		if (n != Integer.MIN_VALUE) {
 			int i = 0;
-			StringBuilder k = new StringBuilder();
+			StringBuilder k = new StringBuilder(9);
 			if (n < 0) {
 				n = -n;
 				k.append("-");
 			}
-			while (exp) { /* Êý×é»¯Îª16½øÖÆ */
+			while (exp) { /*æ•°ç»„åŒ–ä¸º16è¿›åˆ¶*/
 				s[i] = n % 16;
 				n = n / 16;
 				i++;
@@ -28,9 +25,9 @@ public class intToHex {
 			for (int j1 = 0; j1 < i; j1++) {
 				k.append(o[s[i - j1 - 1]]);
 			}
-			reresult = k.toString();
+			return k.toString();
 		} else
-			reresult = "80000000";
+			return "80000000";
 	}
 
 }

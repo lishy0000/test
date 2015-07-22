@@ -1,16 +1,13 @@
 package com.succez;
 
-//Ê÷
+//æ ‘
 class Testtree1 {
 
-	static boolean exp = true;
-	static int count = 0;
-
-	// ÆÕÍ¨Ê÷
+	// æ™®é€šæ ‘
 	static TNode prepareTest1() {
-		TNode root = new TNode('A');
-		TNode left = new TNode('B');
-		TNode right = new TNode('C');
+		TNode root = new TNode("A");
+		TNode left = new TNode("B");
+		TNode right = new TNode("C");
 
 		root.left = left;
 		root.right = right;
@@ -18,14 +15,14 @@ class Testtree1 {
 		return root;
 	}
 
-	// È±Ê¡Ê÷
+	// ç¼ºçœæ ‘
 	static TNode prepareTest2() {
-		TNode root = new TNode('A');
-		TNode left = new TNode('B');
-		TNode right = new TNode('C');
-		TNode leftleft = new TNode('D');
-		TNode leftright = new TNode('E');
-		TNode rightleft = new TNode('F');
+		TNode root = new TNode("A");
+		TNode left = new TNode("B");
+		TNode right = new TNode("C");
+		TNode leftleft = new TNode("D");
+		TNode leftright = new TNode("E");
+		TNode rightleft = new TNode("F");
 
 		root.left = left;
 		root.right = right;
@@ -36,26 +33,40 @@ class Testtree1 {
 		return root;
 	}
 
-	// ¿ÕÊ÷
+	// ç©ºæ ‘
 	static TNode prepareTest3() {
 		TNode root = null;
 		return root;
 	}
 
-	// Êı×é½¨Á¢µÄÊ÷static TNode prepareTest4(char[]chars) {
+	// æ•°ç»„æ„é€ çš„æ ‘
 
-	public static TNode prepareTest4(TNode root, char[] a, int i,int n) {
-		if (i < a.length) {
-			if(Math.pow(2, n)-1<a.length)
-			{
-				TNode tl = new TNode();
-				TNode tr = new TNode();
-				root.setNode(a[i], prepareTest4(tl, a, ++count,++n),
-						prepareTest4(tr, a, ++count,n));
-			}
-			
+	static TNode prepareTest4(String[] a) {
+		TNode tree;
+		if (a.length == 0) {
+			return null;
+		} else
+
+			tree = new TNode(a[0]);
+		int n = 1;
+		int i = 1;
+
+		TreeL(tree, n, a, i);
+
+		return tree;
+	}
+
+	static void TreeL(TNode tree, int n, String[] a, int i) {
+		if (i <= a.length && Math.pow(2, n - 1) - 1 < a.length) {
+			tree.value = a[i - 1];
+			TNode l = new TNode();
+			TNode r = new TNode();
+			tree.left = l;
+			tree.right = r;
+			TreeL(l, ++n, a, i = i * 2);
+			TreeL(r, n, a, i = i + 1);
+
 		}
-	
-		return root;
+
 	}
 }

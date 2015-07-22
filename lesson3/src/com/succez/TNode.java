@@ -1,18 +1,18 @@
 package com.succez;
-//½Úµã
+
+//ï¿½Úµï¿½
 class TNode {
-	char value;
+	String value;
 	TNode left, right;
-	public TNode(){}
-	public TNode(char chars) {
+
+	public TNode() {
+	}
+
+	public TNode(String chars) {
 		this.value = chars;
 	}
+
 	public TNode(TNode tnode) {
 		this.value = tnode.value;
 	}
-	   public void setNode(char value,TNode lc,TNode rc){  
-	        this.value = value;  
-	        left = lc;  
-	        right = rc;  
-	    }
 }

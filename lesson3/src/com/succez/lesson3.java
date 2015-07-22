@@ -1,14 +1,14 @@
 package com.succez;
 
 public class lesson3 {
-//·µ»Ø½ÚµãµÄ×Ö·û´®
-	static char[] chars={'A','B','C','D','E'};
+
+	// è¿”å›žå­—ç¬¦ä¸²
 	static String TreeLevel(TNode tree, int n) {
 		if (tree == null) {
 
-			return "¿ÕÊ÷";
+			return "ç©ºæ ‘";
 		} else if (n <= 0) {
-			return "n²»ÄÜÎª0ºÍ¸ºÊý";
+			return "nä¸èƒ½ä¸º0å’Œè´Ÿæ•°";
 		} else {
 			StringBuilder sb = new StringBuilder();
 
@@ -17,25 +17,24 @@ public class lesson3 {
 			return sb.toString();
 		}
 	}
-//ÕÒ³ö¸Ã²ãËùÓÐ½Úµã²¢¼ÓÔØÔÚ×Ö·û´®ÖÐ
+
+	// æ‰¾åˆ°è¯¥å±‚æ‰€æœ‰èŠ‚ç‚¹
 	static void TreeL(TNode tree, int n, StringBuilder sb) {
 		if (tree != null) {
+			if (tree.value != null) {
+				TreeL(tree.left, --n, sb);
+				if (n == 0)
+					sb.append(tree.value);
 
-			TreeL(tree.left, --n, sb);
-			if (n == 0)
-				sb.append(tree.value);
-
-			TreeL(tree.right, n, sb);
-
+				TreeL(tree.right, n, sb);
+			}
 		}
 	}
 
 	public static void main(String[] args) {
-		 TNode root = new TNode();  
-         
-	
-		TNode tree1 = Testtree1.prepareTest4(root,chars,0,0);
-		String value1 = TreeLevel(tree1, 3);
+		String[] chars = { "as", "L" };
+		TNode tree1 = Testtree1.prepareTest4(chars);
+		String value1 = TreeLevel(tree1, 2);
 		System.out.println(value1);
 
 	}
