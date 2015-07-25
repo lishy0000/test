@@ -1,6 +1,6 @@
 package com.succez;
 
-//�ڵ�
+//节点基类
 class TNode {
 	String value;
 	TNode left, right;

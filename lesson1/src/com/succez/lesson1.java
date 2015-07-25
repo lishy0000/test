@@ -55,9 +55,10 @@ public class lesson1 {
 		if (file3.exists()) { // 如果当前目录有相同的文件名字就把它删除。没有的话就新建。
 			file3.delete();
 		}
-		FileOutputStream output = null;
-		output = new FileOutputStream(file3);
+		BufferedOutputStream output = null;
+		output = new BufferedOutputStream(new FileOutputStream(file3));
 		output.write(b, 0, b.length); // 把字节数组里的实际有效字节写入流里。
+		output.flush();
 		if (output != null)
 			output.close();
 	}
@@ -66,7 +67,8 @@ public class lesson1 {
 
 		try {
 			// 任意的文件读到字节数组里面。
-			File file = new File("test1file3.txt");
+			File file = new File("test1file1.txt");
+			System.out.println(file.getAbsolutePath());
 			byte[] bytes = file2buf(file);
 			bytefile(bytes);
 		} catch (Exception e) {
