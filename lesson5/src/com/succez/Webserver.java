@@ -1,6 +1,8 @@
 package com.succez;
 
 import java.net.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class Webserver {
 	public static void main(String args[]) {
@@ -12,9 +14,10 @@ public class Webserver {
 			System.out.println("Web Server is listening on port "
 					+ server.getLocalPort());
 			System.out.println(server.toString());
+			ExecutorService threadPool = Executors.newFixedThreadPool(2);  
 			for (;;) {
 				client = server.accept(); // 接受客户机的连接请求
-				new ConnectionThread(client, i).start();
+				threadPool.execute(new ConnectionThread(client,i));
 				System.out.println("i的值为"+i);
 				i++;
 			}
@@ -23,5 +26,3 @@ public class Webserver {
 		}
 	}
 }
-
-/* ConnnectionThread类完成与一个Web浏览器的通信 */

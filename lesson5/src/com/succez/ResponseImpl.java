@@ -9,7 +9,7 @@ import java.io.PrintStream;
 
 public class ResponseImpl {
 	PrintStream outs;
-
+	static int leng;
 	public ResponseImpl(PrintStream outstream) {
 		this.outs = outstream;
 
@@ -75,10 +75,10 @@ public class ResponseImpl {
 				e.printStackTrace();
 			}
 			addrequest("HTTP/1.0", 200, "OK");
-			addHeader("MIME_version", "1.0");
+			addHeader("MIME-version", "1.0");
 			addHeader("Content_Type", "text/html");
-			int len = (int) file.length();
-			addHeader("Content_Length", len);
+			 leng = (int) file.length();
+			addHeader("Content-Length", leng);
 			outs.println("");
 			System.out.println(file.getName() + "文件" + file.length());
 			sendfile(file); // 如果目标是文件则发送文
@@ -88,7 +88,8 @@ public class ResponseImpl {
 			addHeader("Content-Type", "text/html;charset=utf-8");
 			new Print(file);
 			try {
-				addHeader("Content-Length", Print.m().length());
+				leng = Print.m().length();
+				addHeader("Content-Length", leng);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -111,8 +112,8 @@ public class ResponseImpl {
 		addrequest("HTTP/1.0", 404, "OK");
 		addHeader("MIME-version", "1.0");
 		addHeader("Content-Type", "text/html;charset=utf-8");
-		int len = (int) file1.length();
-		addHeader("Content-Length", len+6);
+		 leng = (int) file1.length();
+		addHeader("Content-Length", leng);
 		outs.println("");
 		sendfile(file1); // 发送文件
 		outs.flush();

@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
 
+/**
+ * 
+ * @author John
+ *
+ */
 public class RequestImpl {
 	String inps;
 	boolean limit;
@@ -26,6 +31,7 @@ public class RequestImpl {
 				break;
 			}
 			k = is.readLine();
+			
 		}
 		inps = t.toString();
 		if (inps.length() < 30)
