@@ -1,0 +1,89 @@
+﻿<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>无标题文档</title>
+</head>
+<body align="center">
+<table width="62%" border="1" align="center" cellpadding="10" cellspacing="0">
+<tr>
+<td height="244">用户注册
+<form name="form1" method="post" action="http://localhost:8080/LoginUp.html" onSubmit="return check()"> <table width="347" border="1" cellpadding="5" cellspacing="0">
+<tr>
+<td width="142">用户名</td>
+<td width="179"><input name="name" type="text" id="name"></td>
+</tr>
+
+<tr>
+<td>密码</td>
+<td><input name="password" type="password" id="password"></td>
+</tr>
+<tr>
+<td>确认密码</td>
+<td><input name="pwd2" type="password" id="pwd2"></td>
+</tr>
+<tr>
+<td width="142">年龄</td>
+<td width="179"><input name="age" type="int" id="age"></td>
+</tr>
+<tr>
+<td width="142">性别</td>
+<td width="179"><input type="radio" name="sex" value="0" checked=”default” />男<input type="radio" name="sex" value="1" />女</td>
+</tr>
+<tr>
+<td width="142">邮箱地址</td>
+<td width="179"><input name="email" type="text" id="email"></td>
+</tr>
+<tr>
+<td width="142">手机号</td>
+<td width="179"><input name="phone" type="int" id="phone"></td>
+</tr>
+<script language="javascript">
+function check()
+{
+var name=document.getElementById("name").value;
+var password=document.getElementById("password").value;
+var pwd2=document.getElementById("pwd2").value;
+var age=document.getElementById("age").value;
+var phone=document.getElementById("phone").value;
+if(name+password=="")
+{
+ alert("用户名和密码不能为空");
+return false; 
+}
+else if(name=="")
+{
+  alert("用户名不能为空"); return false;
+}
+else if(password=="")
+{
+  alert("密码不能为空"); return false;
+}
+else if(pwd2 != password)
+{
+  alert("两次密码不一样"); return false;
+}
+ else if( typeof age != 'number' && age%1 != 0)
+{
+alert("年龄必须是整数"); return false;
+}
+ else if( typeof phone != 'number' && phone%1 != 0)
+{
+alert("请输入正确的电话号码"); return false;
+}
+else return true;
+}
+</script>
+
+<tr>
+<td colspan="2"><input type="submit" name="submit" value="注册">
+<input type="reset" name="submit" value="重置"> </td>
+</tr>
+</table>
+</form>
+</td>
+</tr>
+</table>
+<p><a href="load.html">返回登录</a></p>
+
+</body>
+</html>

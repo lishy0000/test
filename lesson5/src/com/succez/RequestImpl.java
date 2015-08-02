@@ -3,47 +3,31 @@ package com.succez;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.*;
+import java.net.Socket;
+import java.net.URLDecoder;
 
-/**
- * 
- * @author John
- *
- */
-public class RequestImpl {
-	String inps;
-	boolean limit;
-	// uri 解析用到转义
-	static String[] escape = { "%20", " ", "%22", "-" };
+public class RequestImpl implements Request {
+	private String inps;
+	private InputStream is;
 
-	// " - %22# - %23% - %25& - %26( - %28) - %29+ - %2B, - %2C/ - %2F: - %3A; -
-	// %3B< - %3C= - %3D> - %3E? - %3F@ - %40\ - %5C| - %7C }
-
-	public RequestImpl(BufferedReader is) throws IOException {
+	public RequestImpl(Socket client) throws IOException {
 		// 将请求转换为字符串
-		String k = is.readLine();
-		StringBuilder t = new StringBuilder();
-
-		while (k != null) {
-			t.append(k);
-			t.append("\n");
-			if (k.toString().length() == 0) {
-				System.out.println("已接受请求，处理中。。。。");
-				break;
-			}
-			k = is.readLine();
-			
-		}
-		inps = t.toString();
-		if (inps.length() < 30)
-			limit = false;
-		else
-			limit = true;
+		this.is = client.getInputStream();
+		int size = is.available();
+		byte[] b = new byte[size];
+		is.read(b);
+		String inpis = new String(b);
+		inps = URLDecoder.decode(inpis, "utf-8");
+		System.out.println(inps);
 
 	}
 
+	public InputStream getStream() {
+		return is;
+	}
+
 	public String getUri() {
-		if (!limit)
-			return "错误调用";
+
 		String f = inps.substring(inps.indexOf(' ') + 1);
 		f = f.substring(0, f.indexOf(' '));
 		try {
@@ -52,51 +36,36 @@ public class RequestImpl {
 					f = f.substring(1, f.indexOf('?'));
 				else
 					f = f.substring(1);
+				if (f.equals("") || f.equalsIgnoreCase("index.html"))
+					return "index.html";
 			}
 		} catch (StringIndexOutOfBoundsException e) {
 			System.out.println("Exception:" + e);
 		}
-		for (int i = 0; i < escape.length; i += 2)
-			f = f.replace(escape[i], escape[i + 1]);
-		if (f.endsWith("dir.png"))
-			f = "dir.png";
-		if (f.endsWith("ioc.png"))
-			f = "ioc.png";
-		if (f.endsWith("txt.png"))
-			f = "txt.png";
-		if (f.equals(""))
-			f = "index.html";
 		return f;
+
 	}
 
 	public String getMethod() {
-		if (!limit)
-			return "错误调用";
-		String f = inps.substring(0, 3);
-		return f;
-
+		if ("GET".equalsIgnoreCase(inps.substring(0, 3)))
+			return "GET";
+		else if ("POST".equalsIgnoreCase(inps.substring(0, 4)))
+			return "POST";
+		else
+			return "服务器未认知的请求方式";
 	}
 
 	public String getHost() {
-		if (!limit)
-			return "错误调用";
-		String f = inps;
-		if (f.indexOf("Host:") == -1)
-			return "";
-		f = f.substring(f.indexOf('\n') + 1);
-		f = f.substring(0, f.indexOf('\n'));
-		f = f.substring(f.indexOf(' ') + 1);
-		return f;
+		return getHeader("Host");
+
 	}
 
 	public List<String> getHeaders() {
 		List<String> list = new ArrayList<String>();
-		if (!limit)
-			return list;
 		String f = inps;
 		String k;
-		while (f.length() < 3 && f.indexOf('\n') != -1) {
-			f = f.substring(f.indexOf('\n') + 1);
+		while (f.length() > 2 && f.indexOf("\r\n") != -1) {
+			f = f.substring(f.indexOf("\r\n") + 1);
 			k = f.substring(0, f.indexOf(':'));
 			list.add(k);
 		}
@@ -105,36 +74,67 @@ public class RequestImpl {
 	}
 
 	public String getHeader(String key) {
-		if (!limit)
-			return "错误调用";
+
 		String f = inps;
-		f = f.substring(f.indexOf(key) + 1, f.indexOf('\n'));
-		return f;
+		if (f.indexOf(key) > 0) {
+			f = f.substring(f.indexOf(key) + key.length() + 1);
+			f = f.substring(0, f.indexOf("\r\n"));
+			return f;
+		} else
+			return null;
 
 	}
 
 	public String getBody() {
-		if (!limit)
-			return "错误调用";
-		String f = inps.substring(inps.indexOf(' ') + 1);
-		f = f.substring(0, f.indexOf(' '));
-
-		if (f.indexOf('?') != -1)
-			f = f.substring(f.indexOf('?'));
-		else
-			f = "";
-
-		return f;
+		String f = inps;
+		if ("GET".equalsIgnoreCase(inps.substring(0, 3))) {
+			f = inps.substring(inps.indexOf(' ') + 1);
+			f = f.substring(0, f.indexOf(' '));
+			if (f.indexOf('?') != -1)
+				f = f.substring(f.indexOf('?') + 1);
+			else
+				f = "";
+			return f;
+		} else if ("POST".equalsIgnoreCase(inps.substring(0, 4))) {
+			f = f.substring(f.indexOf("\r\n\r\n") + 4);
+			return f;
+		} else
+			return "";
 
 	}
 
-	public void setStatus(int status) {
-		String filename = getUri();
-		File file = new File(filename);
-		if (file.exists())
-			status = 200;
-		else
-			status = 404;
+	public String getVersion() {
+		String f = inps.substring(inps.indexOf(' ') + 1);
+		f = f.substring(f.indexOf(' ') + 1);
 
+		return f;
+	}
+
+	public List<String> getParameters() {
+		if ("POST".equalsIgnoreCase(inps.substring(0, 4))) {
+			List<String> list = new ArrayList<String>();
+			String f = getBody();
+			String k;
+			while (f.length() > 2 && f.indexOf("\r\n") != -1) {
+				f = f.substring(f.indexOf("\r\n") + 1);
+				k = f.substring(0, f.indexOf(':'));
+				list.add(k);
+			}
+			return list;
+		} else
+			return null;
+	}
+
+	@Override
+	public String getParameter(String key) {
+
+		String f = getBody();
+		if(f.indexOf(key)==-1)return null;
+		f = f.substring(f.indexOf(key) + key.length() + 1);
+		if (f.indexOf("&") > 0) {
+			f = f.substring(0, f.indexOf("&"));
+			return f;
+		} else
+			return f;
 	}
 }

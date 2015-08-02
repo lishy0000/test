@@ -1,83 +1,95 @@
 package com.succez;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.net.Socket;
+import java.util.Map;
 
 class ConnectionThread extends Thread {
 	public Socket client; // 连接Web浏览器的socket字
-	public int counter; // 计数器
-	public static long beginTime;
-	 public static long overTime = 3 * 1000;
-	public ConnectionThread(Socket cl, int c) {
-		 beginTime = System.currentTimeMillis();
+	private long beginTime;
+	private Map<String, Action> actions;
+	private static long OVERTIME = 3 * 10000;
+	private static long maxtime;
+	private SessionManage sessions;
+
+	public ConnectionThread(Socket cl, Map<String, Action> actions,
+			SessionManage sessions) {
+		maxtime = 0;
 		client = cl;
-		counter = c;
+		this.actions = actions;
+		this.sessions = sessions;
 	}
 
 	public void run() // 线程体
 	{
-		
-		try {
-			String destIP = client.getInetAddress().toString(); // 客户机IP地址
-			int destport = client.getPort(); // 客户机端口号
-			System.out.println("Connection " + counter + ":connected to "
-					+ destIP + " on port " + destport + ".");
-			BufferedReader instream = null;
-			instream = new BufferedReader(new InputStreamReader(
-					client.getInputStream()));
-			
-			try {
-				while(true){
-					
-					if((client.getInputStream().toString()!=null)){
-						PrintStream outstream = null;
-						outstream = new PrintStream(client.getOutputStream());
-						
-				RequestImpl requ = new RequestImpl(instream); // 读取Web浏览器提交的请求信息
-				ResponseImpl resp = new ResponseImpl(outstream);
-				if (requ.inps != null)
-					if (requ.getMethod().equalsIgnoreCase("GET")) { // 如果是GET请求
-						String filename = requ.getUri();
-						File file = new File(filename);
-						System.out.println(filename + " requested.");
-						if (file.exists()) {
-							// 若文件存在，则将文件送给Web浏览器
-							// 若果目标是目录则发送目录
-							try {
-								resp.respon(file);
-							} catch (FileNotFoundException e) {
-								resp.respon("error");
 
+		try {
+			while (true) {
+
+				int i = client.getInputStream().available();
+				if (i == 0) {// 等待最长时间
+					if (maxtime < OVERTIME * 350)
+						maxtime = maxtime + 50;
+					else {
+						System.out.println("等待超时");
+						break;
+					}
+					Thread.sleep(50);
+				} else {
+					maxtime = 0;
+					beginTime = System.currentTimeMillis();// 响应开始时的时间
+					RequestImpl requ = new RequestImpl(client); // 读取Web浏览器提交的请求信息
+					ResponseImpl resp = new ResponseImpl(client);
+					String iou = requ.getUri();
+					System.out.println(iou);
+					resp.addrequest("HTTP/1.0", 200, "OK");
+					String sessionid = sessions.execute(requ, resp, sessions);
+					Filter filter = new Filter();
+					String fiter = filter.filter(requ, resp, sessions);
+					if (fiter != null
+							|| requ.getUri().endsWith("Load.html")) {
+						Action action = actions.get(requ.getUri());
+						if (action == null) {
+							action = new AllAction();
+						}
+						try {
+							if ("GET".equals(requ.getMethod())) {
+								action.doGet(requ, resp, sessions, fiter,
+										sessionid);
+							} else {
+								action.doPost(requ, resp, sessions, fiter,
+										sessionid);
 							}
-						
-						} else
-							resp.respon("no found");
-						outstream.flush();
-					}
-				try{
-				 long nowTime = System.currentTimeMillis();
-				if(requ.getHeader("Connection:").contains("close")||((nowTime - beginTime) > overTime)) break;
-					}catch (Exception e) {
-						
-					}
+						} catch (Exception e) {
+							action = new errorAction();
+							action.doGet(requ, resp, sessions, fiter, sessionid);
+						}
+
+						try {
+							long nowTime = System.currentTimeMillis();// 处理时无响应时时间控制
+							if (requ.getHeader("Connection:").contains("close")
+									|| ((nowTime - beginTime) > OVERTIME))
+								break;
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					} else {
+						Action action = (Action) actions.get("Load.html");
+						action.doGet(requ, resp, sessions, fiter, sessionid);
 					}
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				
-				
-				client.close();
 			}
 		} catch (Exception e) {
 			System.out.println("未知错误:" + e);
+		} finally {
+			try {
+				System.out.println("socket关闭");
+				client.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 		}
-		
 	}
 
 }
