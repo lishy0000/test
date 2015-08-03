@@ -36,7 +36,7 @@ public class UserManager extends Database {
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver"); // 加载MYSQL JDBC驱动程序
-			System.out.println("Success loading Mysql Driver!");
+
 		} catch (Exception e) {
 			System.out.print("Error loading Mysql Driver!");
 		}
@@ -68,7 +68,7 @@ public class UserManager extends Database {
 	}
 
 	public void dropUser(String name) {
-		DropSql(name);
+		dropSql(name);
 	}
 
 }

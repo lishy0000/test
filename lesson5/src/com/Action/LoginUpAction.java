@@ -11,18 +11,6 @@ public class LoginUpAction extends AllAction implements Action {
 		return "web/LoginUp.html";
 	}
 
-	public void doGet(RequestImpl request, ResponseImpl response,
-			SessionManage sessions, String fiter) throws Exception {
-		response.addrequest("HTTP/1.0", 200, "OK");
-		response.addHeader("MIME-version", "1.0");
-		response.addHeader("Content-Type", "text/html;charset=utf-8");
-		File file = new File("web\\LoginUp.html");
-		int leng = (int) file.length();
-		response.addHeader("Content-Length", leng);
-		response.sendHeader();
-		response.addBody(filetobyte(file));
-	}
-
 	public void doPost(RequestImpl request, ResponseImpl response,
 			SessionManage sessions, String fiter, String sessionid)
 			throws Exception {
@@ -41,14 +29,21 @@ public class LoginUpAction extends AllAction implements Action {
 						(int) Integer.parseInt(request.getParameter("phone")));
 				umg.AddSql(user1);
 				// 发送数据，改变登录状态,注册成功
-				String tk = "sessionid=".concat(sessionid);
-				response.addHeader("Set-Cookie", tk);
 				Session a = sessions.getSession(sessionid);
 				a.setAttribute("name", request.getParameter("name"));
 				Action action = new indexAction();
-				action.doGet(request, response, sessions, fiter, sessionid);
+				action.doGet(request, response, sessions,
+						request.getParameter("name"), sessionid);
+			} else {
+				response.addrequest("HTTP/1.0", 200, "OK");
+				response.addHeader("MIME-version", "1.0");
+				response.addHeader("Content-Type", "text/html;charset=utf-8");
+				File file = new File("web\\Load.html");
+				int leng = (int) file.length();
+				response.addHeader("Content-Length", leng);
+				response.sendHeader();
+				response.addBody(filetobyte(file));
 			}
-
 		} catch (Exception e) {
 			response.addrequest("HTTP/1.0", 200, "OK");
 			response.addHeader("MIME-version", "1.0");

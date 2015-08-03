@@ -8,17 +8,21 @@ import java.sql.SQLException;
 
 public class Database {
 
-	public  User SelectSql(String name) {
+	public User SelectSql(String name) {
+		Connection connect = null;
 		User user = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver"); // 加载MYSQL JDBC驱动程序
 			// Class.forName("org.gjt.mm.mysql.Driver");
-			System.out.println("Success loading Mysql Driver!");
+
 		} catch (Exception e) {
 			System.out.print("Error loading Mysql Driver!");
+		} finally {
+
 		}
+
 		try {
-			Connection connect = DriverManager.getConnection(
+			connect = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/test", "root", "admin,123");
 			String sql = "select * from user where name =?  ";
 			PreparedStatement pstm = connect.prepareStatement(sql);
@@ -28,14 +32,22 @@ public class Database {
 			// 从结果集中取出数据再输出来
 			while (rs2.next()) {
 				System.out.println(rs2.getString(2));
-				user = new User(rs2.getString(1), rs2.getString(2), (rs2.getInt(3) == 1),
-						rs2.getInt(4), rs2.getString(5), rs2.getString(6),
-						rs2.getInt(7));
+				user = new User(rs2.getString(1), rs2.getString(2),
+						(rs2.getInt(3) == 1), rs2.getInt(4), rs2.getString(5),
+						rs2.getString(6), rs2.getInt(7));
 			}
-			connect.close();
+
 		} catch (SQLException e) {
 
 			System.out.println(e);
+		} finally {
+			if (connect != null)
+				try {
+					connect.close();
+				} catch (SQLException e) {
+
+					e.printStackTrace();
+				}
 		}
 
 		return user;
@@ -45,12 +57,13 @@ public class Database {
 		try {
 			Class.forName("com.mysql.jdbc.Driver"); // 加载MYSQL JDBC驱动程序
 			// Class.forName("org.gjt.mm.mysql.Driver");
-			System.out.println("Success loading Mysql Driver!");
+
 		} catch (Exception e) {
 			System.out.print("Error loading Mysql Driver!");
 		}
+		Connection connect = null;
 		try {
-			Connection connect = DriverManager.getConnection(
+			connect = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/test", "root", "admin,123");
 			int isadmin = 0;
 			if (user.getisAdmin()) {
@@ -67,30 +80,47 @@ public class Database {
 			Statement.setInt(7, user.getPhone());
 
 			Statement.executeUpdate();
-			connect.close();
+
 		} catch (Exception e) {
 			System.out.print(e);
+		} finally {
+			if (connect != null)
+				try {
+					connect.close();
+				} catch (SQLException e) {
+
+					e.printStackTrace();
+				}
 		}
 	}
 
-	public void DropSql(String name) {
+	public void dropSql(String name) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver"); // 加载MYSQL JDBC驱动程序
 			// Class.forName("org.gjt.mm.mysql.Driver");
-			System.out.println("Success loading Mysql Driver!");
+
 		} catch (Exception e) {
 			System.out.print("Error loading Mysql Driver!");
 		}
+		Connection connect = null;
 		try {
-			Connection connect = DriverManager.getConnection(
+			connect = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/test", "root", "admin,123");
 			String sql = "delete from user where name= ?";
 			PreparedStatement pstm = connect.prepareStatement(sql);
 			pstm.setString(1, name);
 			pstm.executeUpdate();
-			connect.close();
+
 		} catch (Exception e) {
 			System.out.print(e);
+		} finally {
+			if (connect != null)
+				try {
+					connect.close();
+				} catch (SQLException e) {
+
+					e.printStackTrace();
+				}
 		}
 	}
 
@@ -98,18 +128,20 @@ public class Database {
 		try {
 			Class.forName("com.mysql.jdbc.Driver"); // 加载MYSQL JDBC驱动程序
 			// Class.forName("org.gjt.mm.mysql.Driver");
-			System.out.println("Success loading Mysql Driver!");
+
 		} catch (Exception e) {
 			System.out.print("Error loading Mysql Driver!");
 		}
+		Connection connect = null;
 		try {
 			int isadmin = 0;
 			if (user.getisAdmin()) {
 				isadmin = 1;
 			}
-			Connection connect = DriverManager.getConnection(
+
+			connect = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/test", "root", "admin,123");
-			String sql = "update user set password=?, isadmin=?, age=?,sex=?,email=?, phone=? where name=?";
+			String sql = "update user set password=?, isadmin=?, age=?,sex=?,email=?,phone=? where name=?";
 			PreparedStatement ps = connect.prepareStatement(sql);
 			ps.setString(1, user.getPassword());
 			ps.setInt(2, isadmin);
@@ -119,9 +151,17 @@ public class Database {
 			ps.setInt(6, user.getPhone());
 			ps.setString(7, user.getName());
 			ps.executeUpdate();
-			connect.close();
+
 		} catch (Exception e) {
 			System.out.print(e);
+		} finally {
+			if (connect != null)
+				try {
+					connect.close();
+				} catch (SQLException e) {
+
+					e.printStackTrace();
+				}
 		}
 	}
 }

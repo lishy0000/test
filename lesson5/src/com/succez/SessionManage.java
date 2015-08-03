@@ -17,7 +17,7 @@ public class SessionManage extends Tool {
 				&& request.getHeader("Cookie").indexOf("sessionid") >= 0) {
 			String k = request.getHeader("Cookie");
 			k = k.substring(k.indexOf("sessionid"));
-			String t = k.substring(11);
+			String t = k.substring(10);
 			Session a=sessions.getSession(t);
 			if(a==null)
 			sessions.getMp().put(t, sessions.createSession(request, t));
@@ -36,7 +36,6 @@ public class SessionManage extends Tool {
 	public Session createSession(RequestImpl request, String sessionid) {
 		synchronized (Session.class) {
 			Session ab = new Session();
-
 			return ab;
 		}
 	}

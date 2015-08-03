@@ -1,7 +1,5 @@
 package com.Action;
 
-import java.io.File;
-
 import com.succez.*;
 
 public class LoginOutAction extends AllAction implements Action {
@@ -17,14 +15,8 @@ public class LoginOutAction extends AllAction implements Action {
 
 		Session a = sessions.getSession(sessionid);
 		a.removeAttribute("name");
-		response.addrequest("HTTP/1.0", 200, "OK");
-		response.addHeader("MIME-version", "1.0");
-		response.addHeader("Content-Type", "text/html;charset=utf-8");
-		File file = new File("web\\Load.html");
-		int leng = (int) file.length();
-		response.addHeader("Content-Length", leng);
-		response.sendHeader();
-		response.addBody(filetobyte(file));
+		Action action = new LoadAction();
+		action.doGet(request, response, sessions, fiter, sessionid);
 
 	}
 

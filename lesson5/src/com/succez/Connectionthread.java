@@ -45,7 +45,7 @@ class ConnectionThread extends Thread {
 					System.out.println(iou);
 					String sessionid = sessions.execute(requ, resp, sessions);
 					Filter filer = new Filter();
-					filer.dofilter(requ, resp, sessions);
+					filer.dofilter(requ, resp, sessions,sessionid);
 					String fiter = filer.filter;
 
 					Action action = actions.get(requ.getUri());
