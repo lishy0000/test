@@ -1,5 +1,6 @@
-package com.succez;
+package com.Action;
 
+import com.succez.*;
 import java.io.File;
 
 public class AllAction extends Tool implements Action {// 没有自己特定的uri时，访问文件系统
@@ -19,13 +20,25 @@ public class AllAction extends Tool implements Action {// 没有自己特定的u
 				response.addHeader("Content-Type", "text/plain");
 				int leng = (int) file.length();
 				response.addHeader("Content-Length", leng);
+				response.sendHeader();
 				response.addBody(filetobyte(file));
-			} else {// 响应非txt文件
+			} else if (filename.endsWith("png")) {// 响应非txt文件
 
 				response.addHeader("MIME-version", "1.0");
 				int leng = (int) file.length();
 				response.addHeader("Content-Length", leng);
+				
 				System.out.println(file.getName() + "文件" + file.length());
+				response.sendHeader();
+				response.addBody(filetobyte(file)); // 如果目标是文件则发送文
+			} else {
+				
+				response.addHeader("MIME-version", "1.0");
+				int leng = (int) file.length();
+				response.addHeader("Content-Length", leng);
+				
+				System.out.println(file.getName() + "文件" + file.length());
+				response.sendHeader();
 				response.addBody(filetobyte(file)); // 如果目标是文件则发送文
 			}
 		} else {// 响应文件夹
@@ -35,6 +48,7 @@ public class AllAction extends Tool implements Action {// 没有自己特定的u
 			new Print(file);
 			int leng = (int) Print.m(file).length();
 			response.addHeader("Content-Length", leng);
+			response.sendHeader();
 			response.addBody(Print.m(file));
 		}
 
@@ -49,7 +63,6 @@ public class AllAction extends Tool implements Action {// 没有自己特定的u
 
 	@Override
 	public String getUri() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

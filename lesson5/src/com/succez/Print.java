@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 
+import com.Action.Tool;
+
 public class Print extends Tool {
 	public File file;
 
@@ -20,7 +22,7 @@ public class Print extends Tool {
 	}
 
 	public static String m(File file) throws IOException {
-
+		synchronized(Print.class){
 		File file3 = new File("File Cache");
 		if (file3.exists())
 			file3.delete();
@@ -62,12 +64,12 @@ public class Print extends Tool {
 
 		if (outstream != null)
 			outstream.close();
-
+		
 		byte[] k = file2buf(file3); // 简单转码
 		String k1 = new String(k, "UTF-8");
 		return k1;
 	}
-
+	}
 	private static byte[] file2buf(File fobj) throws IOException {
 		// 文件转换为字节数组以便转码
 		byte[] b = new byte[(int) (fobj.length() * 1.1)];
@@ -111,6 +113,8 @@ public class Print extends Tool {
 	}
 
 	public static String Printm() throws Exception {
+		synchronized(Print.class){
+		UserManager umg= UserManager.getSingleton();
 
 		File file3 = new File("File Cache");
 		if (file3.exists())
@@ -125,11 +129,11 @@ public class Print extends Tool {
 		outstream.println("<body>");
 		outstream.println("<h1 align=\"center\">My web </h1>");
 		outstream.println("<p><a href=\"/index.html\">返回主页</a></p>");
-		for (int i = 0; i < getAllUser().size(); i++) {
+		for (int i = 0; i <umg. getAllUser().size(); i++) {
 			outstream.println("<p><a href=\"");
 			outstream.print("http://localhost:8080/");
 			outstream.print("web/Chang.html?name=");
-			User user = getAllUser().get(i);
+			User user = umg.getAllUser().get(i);
 			outstream.print(user.getName());
 			outstream.print("\">修改");
 			outstream.println("</a>");
@@ -160,9 +164,10 @@ public class Print extends Tool {
 		String k1 = new String(k, "UTF-8");
 		return k1;
 	}
-
+	}
 	public static String Printindex(String fiter) throws Exception {
-
+		synchronized(Print.class){
+		UserManager umg= UserManager.getSingleton();
 		File file3 = new File("File Cache");
 		if (file3.exists())
 			file3.delete();
@@ -182,7 +187,7 @@ public class Print extends Tool {
 		outstream.print("\">修改");
 		outstream.println("</a></p>");
 		outstream.println("<p>name:");
-		User user1 = getUser(fiter);
+		User user1 = umg.getUser(fiter);
 		outstream.print(user1.getName());
 		outstream.println("<br>age:");
 		outstream.print(user1.getAge());
@@ -197,7 +202,7 @@ public class Print extends Tool {
 		outstream.print("web/LoginOut.html");
 		outstream.print("\">注销");
 		outstream.println("</a></p>");
-		if (getUser(fiter).getisAdmin()) {
+		if (umg.getUser(fiter).getisAdmin()) {
 			outstream.println("<p><a href=\"");
 			outstream.print("http://localhost:8080/");
 			outstream.print("web/Print.html");
@@ -219,5 +224,6 @@ public class Print extends Tool {
 		byte[] k = file2buf(file3); // 简单转码
 		String k1 = new String(k, "UTF-8");
 		return k1;
+	}
 	}
 }

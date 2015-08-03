@@ -1,6 +1,7 @@
 package com.succez;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.io.*;
 import java.net.Socket;
@@ -9,6 +10,10 @@ import java.net.URLDecoder;
 public class RequestImpl implements Request {
 	private String inps;
 	private InputStream is;
+	private String uri;
+	private String getBody;
+	private HashMap<String, String> headlist;
+	private HashMap<String, String> parameterlist;
 
 	public RequestImpl(Socket client) throws IOException {
 		// 将请求转换为字符串
@@ -19,15 +24,6 @@ public class RequestImpl implements Request {
 		String inpis = new String(b);
 		inps = URLDecoder.decode(inpis, "utf-8");
 		System.out.println(inps);
-
-	}
-
-	public InputStream getStream() {
-		return is;
-	}
-
-	public String getUri() {
-
 		String f = inps.substring(inps.indexOf(' ') + 1);
 		f = f.substring(0, f.indexOf(' '));
 		try {
@@ -36,13 +32,35 @@ public class RequestImpl implements Request {
 					f = f.substring(1, f.indexOf('?'));
 				else
 					f = f.substring(1);
-				if (f.equals("") || f.equalsIgnoreCase("index.html"))
-					return "index.html";
+				if (f.equals(""))
+					f = "index.html";
 			}
-		} catch (StringIndexOutOfBoundsException e) {
+		} catch (Exception e) {
 			System.out.println("Exception:" + e);
 		}
-		return f;
+		this.uri = f;
+		this.getBody = getBody();
+		this.headlist = getheadlist();
+		this.parameterlist = parameterlist();
+	}
+
+	private HashMap<String, String> parameterlist() {
+		// 暂时用不到
+		return null;
+	}
+
+	private HashMap<String, String> getheadlist() {
+		//暂时用不到
+		return null;
+	}
+
+	public InputStream getStream() {
+		return is;
+	}
+
+	public String getUri() {
+
+		return uri;
 
 	}
 
@@ -76,7 +94,7 @@ public class RequestImpl implements Request {
 	public String getHeader(String key) {
 
 		String f = inps;
-		if (f.indexOf(key) > 0) {
+		if (f.indexOf(key) != -1) {
 			f = f.substring(f.indexOf(key) + key.length() + 1);
 			f = f.substring(0, f.indexOf("\r\n"));
 			return f;
@@ -110,26 +128,11 @@ public class RequestImpl implements Request {
 		return f;
 	}
 
-	public List<String> getParameters() {
-		if ("POST".equalsIgnoreCase(inps.substring(0, 4))) {
-			List<String> list = new ArrayList<String>();
-			String f = getBody();
-			String k;
-			while (f.length() > 2 && f.indexOf("\r\n") != -1) {
-				f = f.substring(f.indexOf("\r\n") + 1);
-				k = f.substring(0, f.indexOf(':'));
-				list.add(k);
-			}
-			return list;
-		} else
-			return null;
-	}
-
-	@Override
 	public String getParameter(String key) {
 
-		String f = getBody();
-		if(f.indexOf(key)==-1)return null;
+		String f = getBody;
+		if (f.indexOf(key) == -1)
+			return null;
 		f = f.substring(f.indexOf(key) + key.length() + 1);
 		if (f.indexOf("&") > 0) {
 			f = f.substring(0, f.indexOf("&"));
@@ -137,4 +140,22 @@ public class RequestImpl implements Request {
 		} else
 			return f;
 	}
+
+	void seturi(String uri) {
+		this.uri = uri;
+	}
+
+	@Override
+	public List<String> getParameters() {
+		List<String> list = new ArrayList<String>();
+		String k = getBody;
+		String f;
+		while (k.indexOf("&") != -1) {
+			f = k.substring(0, k.indexOf("=") + 1);
+			list.add(f);
+			k = k.substring(k.indexOf("&"));
+		}
+		return list;
+	}
+
 }

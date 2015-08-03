@@ -6,8 +6,10 @@ import java.net.Socket;
 
 public class ResponseImpl {
 	private PrintStream outs;
+	private String header;
 
 	public ResponseImpl(Socket client) {
+		this.header = null;
 		PrintStream outstream = null;
 		try {
 			outstream = new PrintStream(client.getOutputStream());
@@ -15,6 +17,7 @@ public class ResponseImpl {
 			e.printStackTrace();
 		}
 		this.outs = outstream;
+		this.header="";
 	}
 
 	public PrintStream GetPrintStream() {
@@ -30,15 +33,17 @@ public class ResponseImpl {
 	}
 
 	public void addHeader(String key, String value) {
-		outs.print(key);
-		outs.print(":");
-		outs.println(value);
+		header = header.concat(key).concat(":").concat(value).concat("\r\n");
 	}
 
 	public void addHeader(String key, int value) {
-		outs.print(key);
-		outs.print(":");
-		outs.println(value);
+
+		header = header.concat(key).concat(":")
+				.concat(Integer.toString(value).concat("\r\n"));
+	}
+
+	public void sendHeader() {
+		outs.print(header);
 	}
 
 	public void addBody(String body) {

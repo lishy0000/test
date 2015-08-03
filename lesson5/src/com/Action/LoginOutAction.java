@@ -1,8 +1,8 @@
-package com.succez;
+package com.Action;
 
 import java.io.File;
 
-import javax.servlet.http.HttpSession;
+import com.succez.*;
 
 public class LoginOutAction extends AllAction implements Action {
 
@@ -14,16 +14,16 @@ public class LoginOutAction extends AllAction implements Action {
 	public void doGet(RequestImpl request, ResponseImpl response,
 			SessionManage sessions, String fiter, String sessionid)
 			throws Exception {
-		String k = request.getHeader("Cookie");
-		String t = k.substring(11);
-		Session a = sessions.getSession(t);
+
+		Session a = sessions.getSession(sessionid);
 		a.removeAttribute("name");
-		response.addHeader("Cookie", null);
+		response.addrequest("HTTP/1.0", 200, "OK");
 		response.addHeader("MIME-version", "1.0");
 		response.addHeader("Content-Type", "text/html;charset=utf-8");
 		File file = new File("web\\Load.html");
 		int leng = (int) file.length();
 		response.addHeader("Content-Length", leng);
+		response.sendHeader();
 		response.addBody(filetobyte(file));
 
 	}

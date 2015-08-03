@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 public class Database {
 
-	public static  User SelectSql(String name) {
+	public  User SelectSql(String name) {
 		User user = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver"); // 加载MYSQL JDBC驱动程序
@@ -94,7 +94,7 @@ public class Database {
 		}
 	}
 
-	public static void modifySql(User user) {
+	public void modifySql(User user) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver"); // 加载MYSQL JDBC驱动程序
 			// Class.forName("org.gjt.mm.mysql.Driver");

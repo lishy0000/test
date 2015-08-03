@@ -1,4 +1,6 @@
-package com.succez;
+package com.Action;
+
+import com.succez.*;
 
 import java.io.File;
 
@@ -25,6 +27,7 @@ public class ChangeAction extends AllAction implements Action {
 		File file = new File("web\\Change.html");
 		int leng = (int) file.length();
 		response.addHeader("Content-Length", leng);
+		response.sendHeader();
 		response.addBody(filetobyte(file));// 发送数据，改变sql状态
 
 	}
@@ -33,27 +36,28 @@ public class ChangeAction extends AllAction implements Action {
 	public void doPost(RequestImpl request, ResponseImpl response,
 			SessionManage sessions, String fiter, String sessionid)
 			throws Exception {
+		UserManager umg = UserManager.getSingleton();
+		boolean i = umg.SelectSql(fiter).getisAdmin();
 		String k = request.getHeader("Cookie");
 		if (k.indexOf("name:") > 0) {
 			k = k.substring(k.indexOf("name=") + 5);
 
-			User user1 = new User(k, request.getParameter("password"),
-					SelectSql(fiter).getisAdmin(),
+			User user1 = new User(k, request.getParameter("password"), umg
+					.SelectSql(fiter).getisAdmin(),
 					(int) Integer.parseInt(request.getParameter("age")),
 					request.getParameter("sex"), request.getParameter("email"),
 					(int) Integer.parseInt(request.getParameter("phone")));
-			modifySql(user1);
+			umg.modifySql(user1);
 			Action action = new PrintAction();
 			action.doGet(request, response, sessions, fiter, sessionid);
 		} else {
 			try {
 				User user1 = new User(fiter, request.getParameter("password"),
-						false, (int) Integer.parseInt(request
-								.getParameter("age")),
+						i, (int) Integer.parseInt(request.getParameter("age")),
 						request.getParameter("sex"),
 						request.getParameter("email"),
 						(int) Integer.parseInt(request.getParameter("phone")));
-				modifySql(user1);
+				umg.modifySql(user1);
 				Action action = new indexAction();
 				action.doGet(request, response, sessions, fiter, sessionid);
 
@@ -63,6 +67,7 @@ public class ChangeAction extends AllAction implements Action {
 				File file = new File("web\\Change.html");
 				int leng = (int) file.length();
 				response.addHeader("Content-Length", leng);
+				response.sendHeader();
 				response.addBody(filetobyte(file));// 发送数据，
 				// 修改失败，
 			}

@@ -9,13 +9,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserManager extends Database {
+	private volatile static UserManager singleton;
 
-	public static User getUser(String name) {
+	private UserManager() {
+
+	}
+
+	public static UserManager getSingleton() {
+		if (singleton == null) {
+			synchronized (UserManager.class) {
+				if (singleton == null) {
+					singleton = new UserManager();
+				}
+			}
+		}
+		return singleton;
+	}
+
+	public User getUser(String name) {
 		return SelectSql(name);
 
 	}
 
-	static List<User> getAllUser() {
+	List<User> getAllUser() {
 		List<User> list = new ArrayList<User>(100);
 
 		try {
@@ -54,4 +70,5 @@ public class UserManager extends Database {
 	public void dropUser(String name) {
 		DropSql(name);
 	}
+
 }

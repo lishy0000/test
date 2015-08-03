@@ -1,4 +1,6 @@
-package com.succez;
+package com.Action;
+
+import com.succez.*;
 
 public interface Action {
 
